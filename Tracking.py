@@ -18,6 +18,7 @@ cap = cv2.VideoCapture(0)
 # Goturn : 딥러닝 기반으로 추가 모델 파일이 필요함
 
 
+# Tracker create
 trackerKCF = cv2.TrackerCSRT_create()
 
 # 마우스 클릭 시 클릭 좌표 저장 변수
