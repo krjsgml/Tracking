@@ -2,6 +2,8 @@ import cv2
 
 # haarcascades fontalface 경로 
 face_cascade = cv2.CascadeClassifier('C:/jangbogo/haarcascade_frontalface_default.xml')
+#face_cascade = cv2.CascadeClassifier('C:/jangbogo/haarcascade_upperbody.xml')
+
 # font 설정
 font = cv2.FONT_ITALIC
 # open video
@@ -101,9 +103,10 @@ def tracking_user(ROI):
             x2 = (int(trackObjectTuple[0] + trackObjectTuple[2]), int(trackObjectTuple[1] + trackObjectTuple[3])) 
             cv2.rectangle(frame, x1, x2, (255, 0, 0), 2) 
 
-        #else:
-        #    print('user is missing')
-        #    break
+        # user가 frame에서 없어졌을 때, tracking이 더 이상 진행되지 않을 때
+        else:
+            # print('user is missing')
+            break
         
         cv2.imshow("track object", frame) 
         if cv2.waitKey(1) & 0xFF == ord("q"): 
