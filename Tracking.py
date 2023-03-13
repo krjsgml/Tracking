@@ -21,7 +21,7 @@ cap = cv2.VideoCapture(0)
 
 
 # Tracker create
-trackerKCF = cv2.TrackerCSRT_create()
+trackerKCF = cv2.TrackerTLD_create()
 
 # 마우스 클릭 시 클릭 좌표 저장 변수
 coordinate_x = 0
