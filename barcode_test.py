@@ -10,5 +10,5 @@ while True:
     else:
         continue
 
-    if data == 'q':
+    if barcode_data == 'q':
         break
