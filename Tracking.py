@@ -1,12 +1,12 @@
 import cv2
 
 # haarcascades fontalface 경로 
-face_cascade = cv2.CascadeClassifier('C:/jangbogo/haarcascade_frontalface_default.xml')
-#face_cascade = cv2.CascadeClassifier('C:/jangbogo/haarcascade_upperbody.xml')
+#face_cascade = cv2.CascadeClassifier('C:/jangbogo/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('C:/jangbogo/haarcascade_upperbody.xml')
 
 # font 설정
 font = cv2.FONT_ITALIC
-# open video
+# gopen video
 cap = cv2.VideoCapture(0)
 
 # KCF, CSRT, MOSSE, GOTURN
@@ -21,7 +21,7 @@ cap = cv2.VideoCapture(0)
 
 
 # Tracker create
-trackerKCF = cv2.TrackerTLD_create()
+trackerKCF = cv2.TrackerCSRT_create()
 
 # 마우스 클릭 시 클릭 좌표 저장 변수
 coordinate_x = 0
