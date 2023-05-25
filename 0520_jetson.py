@@ -26,6 +26,9 @@ encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 60]
 # Tracking Flag
 flag = 1000
 
+# user_info flag
+user_flag = 1
+
 # Tracker create
 trackerKCF = cv2.TrackerCSRT_create()
 
@@ -34,24 +37,38 @@ trackerKCF = cv2.TrackerCSRT_create()
 def recv_data(client_socket) :
     global flag
     global user_face
+    global user_flag
 
     while True:
         data = client_socket.recv(1024)
+        sig = data.decode()
         print("recive : ",repr(data.decode()))
 
-        if data.decode() == "1":
+        if sig == "1":
             flag = 1
 
-        elif data.decode() == "2":
+        elif sig == "2":
             flag = 2
 
-        elif data.decode() == "0":
+        elif sig == "0":
             flag = 3
-        
+
         else:
-            user_face = tuple(map(int, data.decode().strip("()").split(",")))
+            if user_flag == 1:
+                user_face = tuple(map(int, sig.strip("()").split(",")))
+                print(user_face)
+                user_flag = 0
+        
+        #elif sig in ",":
+        #    user_face = tuple(map(int, sig.strip("()").split(",")))
+        #    print(user_face)
 
+        if (sig == 'w' and sig == 'e' and sig == 'r'
+            and sig == 's' and sig == 'd' and sig == 'f'
+            and sig == 'x' and sig == 'c' and sig == 'v'):
+            pass
 
+        
 start_new_thread(recv_data, (client_socket,))
 print ('>> Connect Server')
 
@@ -170,6 +187,7 @@ while True:
         cv2.destroyAllWindows()
         user_face = 0
         start_flag = 0
+        user_flag = 1
         trackerKCF = cv2.TrackerCSRT_create()
         continue
 

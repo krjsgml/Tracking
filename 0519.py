@@ -3,7 +3,7 @@ from _thread import *
 import cv2
 import numpy as np
 
-HOST = '172.30.1.63'
+HOST = '192.168.0.11'
 PORT = 3333
 
 client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -29,13 +29,17 @@ flag = 1000
 # Tracker create
 trackerKCF = cv2.TrackerCSRT_create()
 
+
+#start_new_thread(tracker_init, ())
+
+
 # 서버로부터 메세지를 받는 메소드
 # 스레드로 구동 시켜, 메세지를 보내는 코드와 별개로 작동하도록 처리
 def recv_data(client_socket) :
     global flag
     global user_face
 
-    while True:
+    while True :
         data = client_socket.recv(1024)
         print("recive : ",repr(data.decode()))
 
@@ -49,6 +53,7 @@ def recv_data(client_socket) :
             flag = 3
         
         else:
+            tuple(user_face)
             user_face = tuple(map(int, data.decode().strip("()").split(",")))
 
 
@@ -99,7 +104,7 @@ while True:
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) < 100:
                 #print('low left')
                 msg = "w"
-
+    
             # 좌측 중간
             elif int(trackObjectTuple[0] + (trackObjectTuple[2]/2)) < 270 and \
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) >= 100 and \
@@ -112,7 +117,7 @@ while True:
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) < 480:
                 #print('high left')
                 msg = "x"
-   
+    
             # 중간 상단
             elif int(trackObjectTuple[0] + (trackObjectTuple[2]/2)) >= 270 and \
                 int(trackObjectTuple[0] + (trackObjectTuple[2]/2)) <= 370 and \
@@ -134,32 +139,34 @@ while True:
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) < 480:
                 #print('high front')
                 msg = "c"
-
+    
             # 우측 상단
             elif int(trackObjectTuple[0] + (trackObjectTuple[2]/2)) < 640 and \
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) < 100:
                 #print('low right')
                 msg = "r"
-
+    
             # 우측 중단
             elif int(trackObjectTuple[0] + (trackObjectTuple[2]/2)) < 640 and \
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) >= 100 and \
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) <= 190:
                 #print('mid right')
                 msg = "f"
-
+    
             # 우측 하단
             elif int(trackObjectTuple[0] + (trackObjectTuple[2]/2)) < 640 and \
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) < 480:
                 #print('high right')
                 msg = "v"
-
+    
             # 매우 가까운 경우
             elif int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) <= 50 and \
                 int(trackObjectTuple[1] + (trackObjectTuple[3]/2)) >= 0:
                 #print("User very close")
                 msg = "q"
                 
+            #### 문제점 여기서 버퍼를 차지해버려서 ###
+            #### 위에 client_socket.sendall(str.....)... 이 부분이 이상하게 가버림 ###
             client_socket.sendall(msg.encode())
 
             cv2.imshow("track object", frame) 
